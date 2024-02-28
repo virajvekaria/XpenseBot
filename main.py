@@ -67,16 +67,16 @@ async def xps(ctx):
         await ctx.send('An error occurred while retrieving expenses.')
 
 @bot.command()
-async def curr(ctx, column_name: str):
+async def curr(ctx):
     try:
         sheet = client.open_by_key(spreadsheet_key).sheet1
-        column_values = sheet.col_values(sheet.find(column_name).col)
+        column_values = sheet.col_values(sheet.find('Amount').col)
         column_values = column_values[1:]
         column_sum = sum(map(float, column_values))
         await ctx.send(f'Your total spending this month is: {column_sum}')
 
     except gspread.exceptions.CellNotFound:
-        await ctx.send(f'Column "{column_name}" not found in the spreadsheet.')
+        await ctx.send(f'Column "{'Amount'}" not found in the spreadsheet.')
     except Exception as e:
         print(e)
         await ctx.send('An error occurred while retrieving and calculating the sum.')
@@ -85,6 +85,20 @@ async def curr(ctx, column_name: str):
 async def clr(ctx):
     spreadsheet = client.open_by_key(spreadsheet_key)
     spreadsheet.sheet1.clear()
+
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(
+        title="Bot Commands",
+        description="Here are the available commands:",
+        color=0x00ff00
+    )
+    embed.add_field(name="!xp <category> <amount>", value="Log an expense", inline=False)
+    embed.add_field(name="!xps", value="Display monthly expenses", inline=False)
+    embed.add_field(name="!curr", value="Calculate the sum of values in a column", inline=False)
+    embed.add_field(name="!clr", value="Clear all contents from the spreadsheet", inline=False)
+    
+    await ctx.send(embed=embed)
 
 # possible further addition could be setting
 # the current amount and then subtracting it
