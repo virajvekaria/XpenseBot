@@ -88,7 +88,7 @@ async def clr(ctx):
     await ctx.send('Successfully cleared the sheet')
 
 @bot.command()
-async def help(ctx):
+async def hlp(ctx):
     embed = discord.Embed(
         title="Bot Commands",
         description="Here are the available commands:",
