@@ -29,7 +29,7 @@ async def on_ready():
     print(f'Logged in as {bot.user.name}')
 
 @bot.command()
-async def expense(ctx, category: str, amount: float):
+async def xp(ctx, category: str, amount: float):
     try:
         # Opening the Google Sheets spreadsheet
         sheet = client.open_by_key(spreadsheet_key).sheet1
@@ -43,7 +43,7 @@ async def expense(ctx, category: str, amount: float):
         await ctx.send('An error occurred while logging the expense.')
 
 @bot.command()
-async def expenses(ctx):
+async def xps(ctx):
     try:
         # Opening the Google Sheets spreadsheet
         sheet = client.open_by_key(spreadsheet_key).sheet1
@@ -65,5 +65,29 @@ async def expenses(ctx):
     except Exception as e:
         print(e)
         await ctx.send('An error occurred while retrieving expenses.')
+
+@bot.command()
+async def curr(ctx, column_name: str):
+    try:
+        sheet = client.open_by_key(spreadsheet_key).sheet1
+        column_values = sheet.col_values(sheet.find(column_name).col)
+        column_values = column_values[1:]
+        column_sum = sum(map(float, column_values))
+        await ctx.send(f'Your total spending this month is: {column_sum}')
+
+    except gspread.exceptions.CellNotFound:
+        await ctx.send(f'Column "{column_name}" not found in the spreadsheet.')
+    except Exception as e:
+        print(e)
+        await ctx.send('An error occurred while retrieving and calculating the sum.')
+
+@bot.command()
+async def clr(ctx):
+    spreadsheet = client.open_by_key(spreadsheet_key)
+    spreadsheet.sheet1.clear()
+
+# possible further addition could be setting
+# the current amount and then subtracting it
+# as you go on spending
 
 bot.run(os.getenv("DISCORD_TOKEN"))
