@@ -85,6 +85,7 @@ async def curr(ctx):
 async def clr(ctx):
     spreadsheet = client.open_by_key(spreadsheet_key)
     spreadsheet.sheet1.clear()
+    await ctx.send('Successfully cleared the sheet')
 
 @bot.command()
 async def help(ctx):
