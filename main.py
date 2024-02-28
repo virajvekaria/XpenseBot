@@ -34,21 +34,7 @@ async def expense(ctx, category: str, amount: float):
         # Opening the Google Sheets spreadsheet
         sheet = client.open_by_key(spreadsheet_key).sheet1
         cats = sheet.col_values(2)
-        data = sheet.get_all_values()
-
-        i = 0
-        while i<len(cats):
-            if(cats[i] == category):
-                index = i
-                break
-            i+=1
-
-        # Adding a new row with expense details
-        if i == len(cats):
-            sheet.append_row([ctx.author.name, category, amount])
-        else:
-            cell = len(data[index])
-            sheet.update_cell(index+1, cell+1, amount)
+        sheet.append_row([ctx.author.name, category, amount])
 
         await ctx.send(f'Expense of Rupees {amount} in category "{category}" logged.')
 
