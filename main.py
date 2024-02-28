@@ -76,7 +76,7 @@ async def curr(ctx):
         await ctx.send(f'Your total spending this month is: {column_sum}')
 
     except gspread.exceptions.CellNotFound:
-        await ctx.send(f'Column "{'Amount'}" not found in the spreadsheet.')
+        await ctx.send(f'Column not found in the spreadsheet.')
     except Exception as e:
         print(e)
         await ctx.send('An error occurred while retrieving and calculating the sum.')
