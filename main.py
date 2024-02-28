@@ -83,9 +83,17 @@ async def curr(ctx):
 
 @bot.command()
 async def clr(ctx):
-    spreadsheet = client.open_by_key(spreadsheet_key)
-    spreadsheet.sheet1.clear()
-    await ctx.send('Successfully cleared the sheet')
+    try:
+        spreadsheet = client.open_by_key(spreadsheet_key)
+        sheet = spreadsheet.sheet1
+        first_row_values = sheet.row_values(1)
+        sheet.clear()
+        sheet.append_row(first_row_values)
+        await ctx.send('Successfully cleared the sheet except for the first row.')
+
+    except Exception as e:
+        print(e)
+        await ctx.send('An error occurred while clearing the sheet.')
 
 @bot.command()
 async def hlp(ctx):
