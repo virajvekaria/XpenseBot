@@ -80,4 +80,4 @@ async def expenses(ctx):
         print(e)
         await ctx.send('An error occurred while retrieving expenses.')
 
-bot.run('')
+bot.run(os.getenv("DISCORD_TOKEN"))
